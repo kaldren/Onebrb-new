@@ -1,0 +1,78 @@
+﻿@page "/profile"
+@using System.Net.Mail;
+@using Onebrb.Web.Model;
+
+<h3>@Greeting</h3>
+<p>@Message</p>
+<div id="profile-form">
+    <div class="form-group">
+        <label for="txtName">Name</label>
+        <input type="text" class="form-control" id="txtName" aria-describedby="nameHelp" @bind="OnebrbProfile.Name">
+        <small id="nameHelp" class="form-text text-muted">Your first and last name (e.g. John Doe).</small>
+    </div>
+    <div class="form-group">
+        <label for="txtEmail">Email address</label>
+        <input type="email" class="form-control" id="txtEmail" aria-describedby="emailHelp" @bind="OnebrbProfile.Email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="txtBio">About you</label>
+        <textarea class="form-control" id="txtBio" aria-describedby="bioHelp" @bind="OnebrbProfile.About"></textarea>
+        <small id="emailHelp" class="form-text text-muted">Share what people should know about you.</small>
+    </div>
+    <button class="btn btn-primary" @onclick="CreateProfile">Click me</button>
+</div>
+
+@code {
+    [Parameter]
+    public string Greeting { get; set; } = "Hi! Create your Onebrb profile!";
+
+    [Parameter]
+    public string Message { get; set; }
+
+    public OnebrbProfile OnebrbProfile = new OnebrbProfile();
+
+    public void CreateProfile()
+    {
+        bool isProfileValid = IsValidProfile(OnebrbProfile);
+
+        if (isProfileValid == false)
+        {
+            Message = $"Oops! Couldn't create your profile, please try again.";
+            return;
+        }
+
+        Message = $"Great job, {OnebrbProfile.Name}! Your Onebrb profile is created.";
+    }
+
+    private bool IsValidProfile(OnebrbProfile profile)
+    {
+        return isValidName(profile.Name) && IsValidEmail(profile.Email);
+    }
+
+    public bool isValidName(string name)
+    {
+        if (name.Length < 1 || name.Length > 25)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            MailAddress m = new MailAddress(email);
+
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
+}
