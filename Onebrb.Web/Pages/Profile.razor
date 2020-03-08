@@ -20,7 +20,7 @@
         <textarea class="form-control" id="txtBio" aria-describedby="bioHelp" @bind="OnebrbProfile.About"></textarea>
         <small id="emailHelp" class="form-text text-muted">Share what people should know about you.</small>
     </div>
-    <button class="btn btn-primary" @onclick="CreateProfile">Click me</button>
+    <button class="btn btn-primary" @onclick="SubmitProfileCreation">Click me</button>
 </div>
 
 @code {
@@ -32,7 +32,7 @@
 
     public OnebrbProfile OnebrbProfile = new OnebrbProfile();
 
-    public void CreateProfile()
+    public void SubmitProfileCreation()
     {
         bool isProfileValid = IsValidProfile(OnebrbProfile);
 
@@ -43,6 +43,22 @@
         }
 
         Message = $"Great job, {OnebrbProfile.Name}! Your Onebrb profile is created.";
+    }
+
+    private ProfileCreationResult CreateProfile()
+    {
+        // Validate profile
+        bool isProfileValid = IsValidProfile(OnebrbProfile);
+
+        if (isProfileValid == false)
+        {
+            return ProfileCreationResult.Error;
+        }
+
+        // Create profile
+
+
+        return ProfileCreationResult.Success;
     }
 
     private bool IsValidProfile(OnebrbProfile profile)
