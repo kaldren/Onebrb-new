@@ -20,7 +20,7 @@
         <textarea class="form-control" id="txtBio" aria-describedby="bioHelp" @bind="OnebrbProfile.About"></textarea>
         <small id="emailHelp" class="form-text text-muted">Share what people should know about you.</small>
     </div>
-    <button class="btn btn-primary" @onclick="SubmitProfileCreation">Click me</button>
+    <button class="btn btn-primary" @onclick="OnCreateProfile">Click me</button>
 </div>
 
 @code {
@@ -32,38 +32,23 @@
 
     public OnebrbProfile OnebrbProfile = new OnebrbProfile();
 
-    public void SubmitProfileCreation()
+    public void OnCreateProfile()
     {
-        bool isProfileValid = IsValidProfile(OnebrbProfile);
-
-        if (isProfileValid == false)
+        if (isValidName(OnebrbProfile.Name) == false)
         {
-            Message = $"Oops! Couldn't create your profile, please try again.";
+            Message = $"Oops! Invalid name, please try again.";
             return;
         }
 
-        Message = $"Great job, {OnebrbProfile.Name}! Your Onebrb profile is created.";
-    }
-
-    private ProfileCreationResult CreateProfile()
-    {
-        // Validate profile
-        bool isProfileValid = IsValidProfile(OnebrbProfile);
-
-        if (isProfileValid == false)
+        if (IsValidEmail(OnebrbProfile.Email) == false)
         {
-            return ProfileCreationResult.Error;
+            Message = $"Oops! Invalid email, please try again.";
+            return;
         }
 
         // Create profile
 
-
-        return ProfileCreationResult.Success;
-    }
-
-    private bool IsValidProfile(OnebrbProfile profile)
-    {
-        return isValidName(profile.Name) && IsValidEmail(profile.Email);
+        Message = $"Great job, {OnebrbProfile.Name}! Your Onebrb profile is created.";
     }
 
     public bool isValidName(string name)
